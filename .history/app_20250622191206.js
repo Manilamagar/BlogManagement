@@ -8,11 +8,9 @@ app.use(express.urlencoded({ extended: true })) //to parse the form data
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
-
+const cookieParser = require("cookie-parser") //to parse cookies
 const isLoggedInOrNot = require("./middleware/isLoggedInorNot")
-//importing isLoggedInOrNot middleware
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
+app.use(cookieParser()) //using cookie parser middleware
 
 
 
@@ -30,28 +28,13 @@ app.get("/",isLoggedInOrNot,async (req, res) => {
 })
 
 app.get("/add-blog",(req,res) => {
-   res.render("todo/add-blog") 
+   res.render("todo/add-todo") 
 })
 app.get("/edit-blog",(req,res) => {
-    res.render("todo/edit-blog")
+    res.render("todo/edit-todo")
 })
 
 
-
-app.post('/add-blog',isLoggedInOrNot ,async (req, res) => {
-    const userID = req.userId//getting user id from the token
-    const { task,date,description } = req.body;
-
-    const users = await db.todos.create({
-        Task: task,discription: description, date,
-        userId: userID
-    })
-    res.redirect("/")
-    
-    // res.render("todo/add-todo", {
-    //     message: "Todo added successfully"
-    // })
-})
 
 
 
@@ -109,51 +92,6 @@ await db.users.create({
     })
     
   res.send('User registered successfully')
-})
-
-
-
-
-
-app.get("/delete/:id", async (req, res) => {
-    const id = req.params.id
-
-    await db.todos.destroy({
-        where: {
-            id: id
-        }
-    })
-    res.send("Deleted successfully")
-})
-
-
-app.get("/edit/:id",isLoggedInOrNot,async(req,res) => {
-   const id = req.params.id
-   const todos = await db.todos.findAll({
-    where: {
-        id:id
-    }
-   }) 
-//    res.send(todos) //sending the todo data to the client
-   
-   res.render("todo/edit-todo", {todos: todos}) //rendering the edit-todo.ejs file and passing the todo data to it
-})
-
-app.post("/edit-todo/:id", isLoggedInOrNot,async (req, res) => {
-    const id = req.params.id
-    const { task, date, description } = req.body
-
-    await db.todos.update({
-        Task: task,
-        discription: description,
-        date: date,
-        status: status
-    }, {
-        where: {
-            id: id
-        }
-    })
-    res.redirect("/")
 })
 
 

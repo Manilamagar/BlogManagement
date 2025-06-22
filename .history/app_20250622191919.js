@@ -11,8 +11,6 @@ const jwt = require("jsonwebtoken")
 
 const isLoggedInOrNot = require("./middleware/isLoggedInorNot")
 //importing isLoggedInOrNot middleware
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
 
 
 

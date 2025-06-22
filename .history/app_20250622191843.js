@@ -8,11 +8,9 @@ app.use(express.urlencoded({ extended: true })) //to parse the form data
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
+const cookieParser = require("cookie-parser") //to parse cookies
+app.use(cookieParser()) //using cookie parser middleware
 
-const isLoggedInOrNot = require("./middleware/isLoggedInorNot")
-//importing isLoggedInOrNot middleware
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
 
 
 

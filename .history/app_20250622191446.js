@@ -8,11 +8,9 @@ app.use(express.urlencoded({ extended: true })) //to parse the form data
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
-
+const cookieParser = require("cookie-parser") //to parse cookies
 const isLoggedInOrNot = require("./middleware/isLoggedInorNot")
-//importing isLoggedInOrNot middleware
-const cookieParser = require('cookie-parser')
-app.use(cookieParser())
+app.use(cookieParser()) //using cookie parser middleware
 
 
 
@@ -155,8 +153,6 @@ app.post("/edit-todo/:id", isLoggedInOrNot,async (req, res) => {
     })
     res.redirect("/")
 })
-
-
 
 app.listen(4000,function(){
     console.log("Backend has started on port 3000")
