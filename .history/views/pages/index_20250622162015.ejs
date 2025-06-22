@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+            font-family: inherit;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .blog-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 20px;
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .search-bar input {
+            padding-left: 50px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-published {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .blog-actions {
+                justify-content: center;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blog Management System</h1>
+            <p>Create, manage, and organize your blog posts with ease</p>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-primary" onclick="showView('dashboard')">Dashboard</button>
+                <button class="btn btn-secondary" onclick="showView('create')">New Post</button>
+                <button class="btn btn-secondary" onclick="showView('manage')">Manage Posts</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view">
+                <h2 style="margin-bottom: 20px; text-align: center;">Dashboard</h2>
+                <div class="blog-grid">
+                    <div class="blog-card" style="text-align: center; border: 2px dashed #ddd;">
+                        <h3 style="color: #666; margin-bottom: 15px;">Total Posts</h3>
+                        <div style="font-size: 3rem; font-weight: bold; color: #667eea;" id="total-posts">0</div>
+                    </div>
+                    <div class="blog-card" style="text-align: center; border: 2px dashed #ddd;">
+                        <h3 style="color: #666; margin-bottom: 15px;">Published</h3>
+                        <div style="font-size: 3rem; font-weight: bold; color: #28a745;" id="published-posts">0</div>
+                    </div>
+                    <div class="blog-card" style="text-align: center; border: 2px dashed #ddd;">
+                        <h3 style="color: #666; margin-bottom: 15px;">Drafts</h3>
+                        <div style="font-size: 3rem; font-weight: bold; color: #ffc107;" id="draft-posts">0</div>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 20px;">Recent Posts</h3>
+                    <div id="recent-posts"></div>
+                </div>
+            </div>
+
+            <!-- Create Post View -->
+            <div id="create-view" class="view hidden">
+                <h2 style="margin-bottom: 25px; text-align: center;">Create New Post</h2>
+                <form id="blog-form">
+                    <div class="form-group">
+                        <label for="title">Post Title *</label>
+                        <input type="text" id="title" class="form-control" required placeholder="Enter your blog post title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="author">Author *</label>
+                        <input type="text" id="author" class="form-control" required placeholder="Author name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" class="form-control">
+                            <option value="">Select a category</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Food">Food</option>
+                            <option value="Health">Health</option>
+                            <option value="Education">Education</option>
+                            <option value="Business">Business</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <input type="text" id="tags" class="form-control" placeholder="Enter tags separated by commas">
+                        <small style="color: #666; font-size: 0.9rem;">e.g., javascript, web development, programming</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content">Content *</label>
+                        <textarea id="content" class="form-control" required placeholder="Write your blog post content here..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" class="form-control">
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                        <button type="submit" class="btn btn-primary">Save Post</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Manage Posts View -->
+            <div id="manage-view" class="view hidden">
+                <h2 style="margin-bottom: 25px; text-align: center;">Manage Posts</h2>
+                
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" class="form-control" placeholder="Search posts by title, author, or category...">
+                </div>
+                
+                <div id="posts-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 20px; text-align: center;">Edit Post</h3>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label for="edit-title">Title *</label>
+                    <input type="text" id="edit-title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-author">Author *</label>
+                    <input type="text" id="edit-author" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-category">Category</label>
+                    <select id="edit-category" class="form-control">
+                        <option value="">Select a category</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Food">Food</option>
+                        <option value="Health">Health</option>
+                        <option value="Education">Education</option>
+                        <option value="Business">Business</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-tags">Tags</label>
+                    <input type="text" id="edit-tags" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-content">Content *</label>
+                    <textarea id="edit-content" class="form-control" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-status">Status</label>
+                    <select id="edit-status" class="form-control">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button type="submit" class="btn btn-primary">Update Post</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let blogPosts = [];
+        let editingId = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPosts();
+            updateDashboard();
+            
+            // Add event listeners
+            document.getElementById('blog-form').addEventListener('submit', handleSubmit);
+            document.getElementById('edit-form').addEventListener('submit', handleEdit);
+            document.getElementById('search-input').addEventListener('input', handleSearch);
+            
+            // Close modal when clicking outside
+            document.getElementById('edit-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+
+        // Show different views
+        function showView(viewName) {
+            const views = document.querySelectorAll('.view');
+            views.forEach(view => view.classList.add('hidden'));
+            
+            const targetView = document.getElementById(viewName + '-view');
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('fade-in');
+                
+                if (viewName === 'manage') {
+                    displayPosts();
+                } else if (viewName === 'dashboard') {
+                    updateDashboard();
+                }
+            }
+        }
+
+        // Handle form submission
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const category = document.getElementById('category').value;
+            const tags = document.getElementById('tags').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const status = document.getElementById('status').value;
+            
+            if (!title || !author || !content) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+            
+            const newPost = {
+                id: Date.now(),
+                title,
+                author,
+                category,
+                tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+                content,
+                status,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            blogPosts.unshift(newPost);
+            savePosts();
+            clearForm();
+            updateDashboard();
+            
+            alert('Blog post saved successfully!');
+            showView('dashboard');
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('blog-form').reset();
+        }
+
+        // Display posts in manage view
+        function displayPosts(posts = blogPosts) {
+            const container = document.getElementById('posts-container');
+            
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No posts found</h3>
+                        <p>Start creating your first blog post!</p>
+                        <button class="btn btn-primary" onclick="showView('create')">Create Post</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="blog-grid">
+                    ${posts.map(post => `
+                        <div class="blog-card">
+                            <h3 class="blog-title">${post.title}</h3>
+                            <div class="blog-meta">
+                                <span>By ${post.author}</span>
+                                <span>${formatDate(post.createdAt)}</span>
+                                <span class="status-badge ${post.status === 'published' ? 'status-published' : 'status-draft'}">
+                                    ${post.status}
+                                </span>
+                            </div>
+                            ${post.category ? `<div style="margin-bottom: 10px;"><strong>Category:</strong> ${post.category}</div>` : ''}
+                            ${post.tags.length > 0 ? `<div style="margin-bottom: 15px; font-size: 0.9rem; color: #667eea;"><strong>Tags:</strong> ${post.tags.join(', ')}</div>` : ''}
+                            <div class="blog-content">${post.content}</div>
+                            <div class="blog-actions">
+                                <button class="btn btn-edit btn-small" onclick="editPost(${post.id})">Edit</button>
+                                <button class="btn btn-delete btn-small" onclick="deletePost(${post.id})">Delete</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Search functionality
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (!query) {
+                displayPosts();
+                return;
+            }
+            
+            const filteredPosts = blogPosts.filter(post => 
+                post.title.toLowerCase().includes(query) ||
+                post.author.toLowerCase().includes(query) ||
+                post.category.toLowerCase().includes(query) ||
+                post.content.toLowerCase().includes(query) ||
+                post.tags.some(tag => tag.toLowerCase().includes(query))
+            );
+            
+            displayPosts(filteredPosts);
+        }
+
+        // Edit post
+        function editPost(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (!post) return;
+            
+            editingId = id;
+            
+            document.getElementById('edit-title').value = post.title;
+            document.getElementById('edit-author').value = post.author;
+            document.getElementById('edit-category').value = post.category;
+            document.getElementById('edit-tags').value = post.tags.join(', ');
+            document.getElementById('edit-content').value = post.content;
+            document.getElementById('edit-status').value = post.status;
+            
+            document.getElementById('edit-modal').classList.add('show');
+        }
+
+        // Handle edit submission
+        function handleEdit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('edit-title').value.trim();
+            const author = document.getElementById('edit-author').value.trim();
+            const category = document.getElementById('edit-category').value;
+            const tags = document.getElementById('edit-tags').value.trim();
+            const content = document.getElementById('edit-content').value.trim();
+            const status = document.getElementById('edit-status').value;
+            
+            if (!title || !author || !content) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+            
+            const postIndex = blogPosts.findIndex(p => p.id === editingId);
+            if (postIndex !== -1) {
+                blogPosts[postIndex] = {
+                    ...blogPosts[postIndex],
+                    title,
+                    author,
+                    category,
+                    tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
+                    content,
+                    status,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                savePosts();
+                displayPosts();
+                updateDashboard();
+                closeModal();
+                
+                alert('Post updated successfully!');
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('edit-modal').classList.remove('show');
+            editingId = null;
+        }
+
+        // Delete post
+        function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                blogPosts = blogPosts.filter(p => p.id !== id);
+                savePosts();
+                displayPosts();
+                updateDashboard();
+                alert('Post deleted successfully!');
+            }
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            const total = blogPosts.length;
+            const published = blogPosts.filter(p => p.status === 'published').length;
+            const drafts = blogPosts.filter(p => p.status === 'draft').length;
+            
+            document.getElementById('total-posts').textContent = total;
+            document.getElementById('published-posts').textContent = published;
+            document.getElementById('draft-posts').textContent = drafts;
+            
+            // Show recent posts
+            const recentPosts = blogPosts.slice(0, 3);
+            const recentContainer = document.getElementById('recent-posts');
+            
+            if (recentPosts.length === 0) {
+                recentContainer.innerHTML = `
+                    <div class="empty-state">
+                        <p>No posts yet. Create your first post!</p>
+                        <button class="btn btn-primary" onclick="showView('create')">Create Post</button>
+                    </div>
+                `;
+            } else {
+                recentContainer.innerHTML = `
+                    <div class="blog-grid">
+                        ${recentPosts.map(post => `
+                            <div class="blog-card">
+                                <h3 class="blog-title">${post.title}</h3>
+                                <div class="blog-meta">
+                                    <span>By ${post.author}</span>
+                                    <span>${formatDate(post.createdAt)}</span>
+                                    <span class="status-badge ${post.status === 'published' ? 'status-published' : 'status-draft'}">
+                                        ${post.status}
+                                    </span>
+                                </div>
+                                <div class="blog-content">${post.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Save posts to memory (in a real app, this would be an API call)
+        function savePosts() {
+            // In a real application, you would send this data to a backend server
+            console.log('Posts saved:', blogPosts);
+        }
+
+        // Load posts from memory (in a real app, this would be an API call)
+        function loadPosts() {
+            // In a real application, you would fetch this data from a backend server
+            // For demo purposes, we'll start with some sample data
+            if (blogPosts.length === 0) {
+                blogPosts = [
+                    {
+                        id: 1,
+                        title: "Welcome to the Blog Management System",
+                        author: "Admin",
+                        category: "Technology",
+                        tags: ["welcome", "blog", "cms"],
+                        content: "This is your first blog post! The Blog Management System allows you to easily create, edit, and manage your blog posts. You can categorize posts, add tags, and save them as drafts or publish them immediately. Get started by creating your first post!",
+                        status: "published",
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    }
+                ];
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+</body>
+</html>
