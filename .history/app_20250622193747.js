@@ -11,7 +11,9 @@ const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser") //to parse cookies
 app.use(cookieParser()) //using cookie parser middleware
 
-const isLoggedInOrNot = require("./middleware/isLoggedInOrNot") //importing middleware to check if user is logged in or not
+ReferenceError: datas is not defined
+    at C:\Users\user\Desktop\Blog Management\app.js:29:42
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
 
 
 

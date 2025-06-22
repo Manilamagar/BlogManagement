@@ -9,9 +9,10 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
 const cookieParser = require("cookie-parser") //to parse cookies
+const isLoggedInOrNot = require("./middleware/isLoggedInorNot")
 app.use(cookieParser()) //using cookie parser middleware
 
-const isLoggedInOrNot = require("./middleware/isLoggedInOrNot") //importing middleware to check if user is logged in or not
+
 
 
 
