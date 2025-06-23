@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            height: fit-content;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-item .icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .content-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-select {
+            padding: 15px 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+
+        .blog-card-content {
+            padding: 25px;
+        }
+
+        .blog-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .blog-card-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .blog-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            border-radius: 8px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-published {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .status-draft {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+        }
+
+        .status-scheduled {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .content-area {
+                order: 1;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-bar {
+                flex-direction: column;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header fade-in">
+            <h1>✨ Blog Management System</h1>
+            <p>Create, manage, and publish your content with style</p>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar fade-in">
+                <div class="nav-item active" data-section="dashboard">
+                    <span class="icon">📊</span>
+                    Dashboard
+                </div>
+                <div class="nav-item" data-section="posts">
+                    <span class="icon">📝</span>
+                    All Posts
+                </div>
+                <div class="nav-item" data-section="drafts">
+                    <span class="icon">📄</span>
+                    Drafts
+                </div>
+                <div class="nav-item" data-section="published">
+                    <span class="icon">🌐</span>
+                    Published
+                </div>
+                <div class="nav-item" data-section="analytics">
+                    <span class="icon">📈</span>
+                    Analytics
+                </div>
+                <div class="nav-item" data-section="settings">
+                    <span class="icon">⚙️</span>
+                    Settings
+                </div>
+            </div>
+
+            <div class="content-area fade-in">
+                <div class="content-header">
+                    <h2 class="content-title">All Posts</h2>
+                    <button class="btn btn-primary" onclick="showNewPostModal()">
+                        <span>➕</span>
+                        New Post
+                    </button>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search posts..." id="searchInput">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                        <option value="scheduled">Scheduled</option>
+                    </select>
+                </div>
+
+                <div class="blog-grid" id="blogGrid">
+                    <!-- Blog cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Post Modal -->
+    <div class="modal" id="newPostModal">
+        <div class="modal-content">
+            <span class="close" onclick="hideNewPostModal()">&times;</span>
+            <h3 style="margin-bottom: 30px; font-size: 1.8rem; color: #333;">Create New Post</h3>
+            
+            <form id="newPostForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-input" id="postTitle" placeholder="Enter post title..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-input" id="postCategory">
+                        <option value="technology">Technology</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="travel">Travel</option>
+                        <option value="food">Food</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea class="form-textarea" id="postContent" placeholder="Write your blog post content here..." rows="6" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-input" id="postStatus">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                        <option value="scheduled">Scheduled</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="hideNewPostModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sample blog data
+        let blogPosts = [
+            {
+                id: 1,
+                title: "The Future of Web Development in 2025",
+                category: "Technology",
+                status: "published",
+                date: "2025-06-20",
+                author: "John Doe",
+                excerpt: "Exploring the latest trends and technologies shaping the web development landscape, from AI integration to new frameworks.",
+                content: "Full content here..."
+            },
+            {
+                id: 2,
+                title: "10 Essential Travel Tips for Digital Nomads",
+                category: "Travel",
+                status: "draft",
+                date: "2025-06-19",
+                author: "Jane Smith",
+                excerpt: "A comprehensive guide for remote workers who want to travel the world while maintaining productivity.",
+                content: "Full content here..."
+            },
+            {
+                id: 3,
+                title: "Sustainable Living: Small Changes, Big Impact",
+                category: "Lifestyle",
+                status: "scheduled",
+                date: "2025-06-25",
+                author: "Mike Johnson",
+                excerpt: "Discover how simple lifestyle changes can contribute to a more sustainable future for our planet.",
+                content: "Full content here..."
+            },
+            {
+                id: 4,
+                title: "The Art of Minimalist Cooking",
+                category: "Food",
+                status: "published",
+                date: "2025-06-18",
+                author: "Sarah Wilson",
+                excerpt: "Learn how to create delicious meals with minimal ingredients and maximum flavor.",
+                content: "Full content here..."
+            },
+            {
+                id: 5,
+                title: "Building a Successful Remote Team",
+                category: "Business",
+                status: "published",
+                date: "2025-06-17",
+                author: "David Chen",
+                excerpt: "Strategies and best practices for managing and growing a distributed team in the modern workplace.",
+                content: "Full content here..."
+            },
+            {
+                id: 6,
+                title: "Photography Tips for Beginners",
+                category: "Lifestyle",
+                status: "draft",
+                date: "2025-06-16",
+                author: "Emily Brown",
+                excerpt: "Master the basics of photography with these essential tips and techniques for stunning shots.",
+                content: "Full content here..."
+            }
+        ];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBlogPosts(blogPosts);
+            setupEventListeners();
+        });
+
+        function renderBlogPosts(posts) {
+            const blogGrid = document.getElementById('blogGrid');
+            blogGrid.innerHTML = '';
+
+            posts.forEach(post => {
+                const postCard = createBlogCard(post);
+                blogGrid.appendChild(postCard);
+            });
+        }
+
+        function createBlogCard(post) {
+            const card = document.createElement('div');
+            card.className = 'blog-card fade-in';
+            
+            const statusClass = `status-${post.status}`;
+            
+            card.innerHTML = `
+                <div class="blog-card-image"></div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">${post.title}</h3>
+                    <div class="blog-card-meta">
+                        <span>📅 ${formatDate(post.date)}</span>
+                        <span>👤 ${post.author}</span>
+                        <span class="status-badge ${statusClass}">${post.status}</span>
+                    </div>
+                    <p class="blog-card-excerpt">${post.excerpt}</p>
+                    <div class="blog-card-actions">
+                        <button class="btn btn-secondary btn-small" onclick="editPost(${post.id})">
+                            ✏️ Edit
+                        </button>
+                        <button class="btn btn-primary btn-small" onclick="viewPost(${post.id})">
+                            👁️ View
+                        </button>
+                        <button class="btn btn-secondary btn-small" onclick="deletePost(${post.id})" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const section = this.dataset.section;
+                    updateContentTitle(section);
+                    
+                    if (section === 'drafts') {
+                        renderBlogPosts(blogPosts.filter(post => post.status === 'draft'));
+                    } else if (section === 'published') {
+                        renderBlogPosts(blogPosts.filter(post => post.status === 'published'));
+                    } else {
+                        renderBlogPosts(blogPosts);
+                    }
+                });
+            });
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredPosts = blogPosts.filter(post => 
+                    post.title.toLowerCase().includes(searchTerm) ||
+                    post.content.toLowerCase().includes(searchTerm) ||
+                    post.category.toLowerCase().includes(searchTerm)
+                );
+                renderBlogPosts(filteredPosts);
+            });
+
+            // Status filter
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                const selectedStatus = this.value;
+                const filteredPosts = selectedStatus === 'all' 
+                    ? blogPosts 
+                    : blogPosts.filter(post => post.status === selectedStatus);
+                renderBlogPosts(filteredPosts);
+            });
+
+            // New post form
+            document.getElementById('newPostForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createNewPost();
+            });
+        }
+
+        function updateContentTitle(section) {
+            const titles = {
+                dashboard: 'Dashboard',
+                posts: 'All Posts',
+                drafts: 'Draft Posts',
+                published: 'Published Posts',
+                analytics: 'Analytics',
+                settings: 'Settings'
+            };
+            
+            document.querySelector('.content-title').textContent = titles[section] || 'All Posts';
+        }
+
+        function showNewPostModal() {
+            document.getElementById('newPostModal').classList.add('active');
+        }
+
+        function hideNewPostModal() {
+            document.getElementById('newPostModal').classList.remove('active');
+            document.getElementById('newPostForm').reset();
+        }
+
+        function createNewPost() {
+            const title = document.getElementById('postTitle').value;
+            const category = document.getElementById('postCategory').value;
+            const content = document.getElementById('postContent').value;
+            const status = document.getElementById('postStatus').value;
+            
+            const newPost = {
+                id: blogPosts.length + 1,
+                title: title,
+                category: category,
+                status: status,
+                date: new Date().toISOString().split('T')[0],
+                author: 'Current User',
+                excerpt: content.substring(0, 150) + '...',
+                content: content
+            };
+            
+            blogPosts.unshift(newPost);
+            renderBlogPosts(blogPosts);
+            hideNewPostModal();
+            
+            // Show success message (you could implement a toast notification here)
+            alert('Post created successfully!');
+        }
+
+        function editPost(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (post) {
+                // Pre-fill the modal with existing post data
+                document.getElementById('postTitle').value = post.title;
+                document.getElementById('postCategory').value = post.category.toLowerCase();
+                document.getElementById('postContent').value = post.content;
+                document.getElementById('postStatus').value = post.status;
+                showNewPostModal();
+            }
+        }
+
+        function viewPost(id) {
+            const post = blogPosts.find(p => p.id === id);
+            if (post) {
+                alert(`Viewing post: ${post.title}\n\nThis would typically open the post in a new tab or modal.`);
+            }
+        }
+
+        function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                blogPosts = blogPosts.filter(post => post.id !== id);
+                renderBlogPosts(blogPosts);
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('newPostModal');
+            if (e.target === modal) {
+                hideNewPostModal();
+            }
+        });
+    </script>
+</body>
+</html>

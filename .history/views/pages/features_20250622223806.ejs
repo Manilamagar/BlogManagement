@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Platform Features</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            color: white;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: rotate(360deg) scale(1.1);
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        }
+
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon::after {
+            opacity: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover h3 {
+            color: #667eea;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .feature-card:hover p {
+            color: #555;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .feature-card.animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .feature-card {
+                padding: 2rem;
+            }
+            
+            .content-section {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+            }
+            
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loading animation for cards */
+        .feature-card.loading {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .feature-card.loaded {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Features Section -->
+    <section class="content-section">
+        <h2 class="section-title">Platform  Features</h2>
+        <div class="features-grid">
+            <div class="feature-card loading" data-delay="0">
+                <div class="feature-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3>Rich Text Editor</h3>
+                <p>Create beautiful blog posts with our intuitive rich text editor. Add images, format text, and create engaging content effortlessly.</p>
+            </div>
+            <div class="feature-card loading" data-delay="100">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Responsive Design</h3>
+                <p>Your blog looks perfect on all devices. Our responsive design ensures your content is accessible on desktop, tablet, and mobile.</p>
+            </div>
+            <div class="feature-card loading" data-delay="200">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>User Management</h3>
+                <p>Secure user registration and login system with role-based access control for authors, editors, and administrators.</p>
+            </div>
+            <div class="feature-card loading" data-delay="300">
+                <div class="feature-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>SEO Optimized</h3>
+                <p>Built-in SEO optimization tools to help your content rank better in search engines and reach a wider audience.</p>
+            </div>
+            <div class="feature-card loading" data-delay="400">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Comment System</h3>
+                <p>Engage with your readers through our integrated comment system. Moderate comments and build community discussions.</p>
+            </div>
+            <div class="feature-card loading" data-delay="500">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics Dashboard</h3>
+                <p>Track your blog's performance with detailed analytics. Monitor views, engagement, and user behavior.</p>
+            </div>
+
+             <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h4>Rich Text Editor</h4>
+                    <p>Create beautiful blog posts with our advanced rich text editor featuring markdown support, image uploads, and real-time preview.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Community Driven</h4>
+                    <p>Connect with fellow writers, share ideas, collaborate on projects, and build your audience in our vibrant community.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Analytics Dashboard</h4>
+                    <p>Track your blog's performance with detailed analytics including views, engagement, and audience demographics.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4>Mobile Responsive</h4>
+                    <p>Your blog looks perfect on all devices. Write and read on the go with our fully responsive design.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Advanced Search</h4>
+                    <p>Powerful search functionality with filters, tags, and categories to help readers find exactly what they're looking for.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Secure & Fast</h4>
+                    <p>Built with security and performance in mind. Your content is safe and loads lightning fast for all users.</p>
+                </div>
+            </div>
+        </section>
+    
+
+     <!-- Features Section -->
+        <section id="features" class="container mt-5">
+            <h2 class="section-title fade-in">Amazing Features</h2>
+           
+    <script>
+        // DOM Content Loaded Event
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFeatures();
+            setupScrollAnimations();
+            setupCardInteractions();
+            setupKeyboardNavigation();
+        });
+
+        // Initialize feature cards with staggered animation
+        function initializeFeatures() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach((card, index) => {
+                const delay = parseInt(card.dataset.delay) || index * 100;
+                
+                setTimeout(() => {
+                    card.classList.remove('loading');
+                    card.classList.add('loaded');
+                }, delay);
+            });
+        }
+
+        // Setup scroll-based animations
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = `${Math.random() * 0.5}s`;
+                        entry.target.classList.add('animate-pulse');
+                        
+                        // Remove animation after completion
+                        setTimeout(() => {
+                            entry.target.classList.remove('animate-pulse');
+                        }, 2000);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.feature-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Setup interactive card behaviors
+        function setupCardInteractions() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach(card => {
+                // Mouse enter effect
+                card.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '10';
+                    
+                    // Add ripple effect
+                    createRippleEffect(this, event);
+                });
+                
+                // Mouse leave effect
+                card.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '1';
+                });
+                
+                // Click effect
+                card.addEventListener('click', function(e) {
+                    createClickEffect(this, e);
+                    
+                    // Simulate card action (you can replace this with actual functionality)
+                    console.log(`Feature clicked: ${this.querySelector('h3').textContent}`);
+                    
+                    // Optional: Show a toast notification
+                    showToast(`Exploring ${this.querySelector('h3').textContent}...`);
+                });
+            });
+        }
+
+        // Create ripple effect on hover
+        function createRippleEffect(element, event) {
+            const ripple = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'ripple 0.6s linear';
+            ripple.style.pointerEvents = 'none';
+            
+            element.appendChild(ripple);
+            
+            // Remove ripple after animation
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Create click effect
+        function createClickEffect(element, event) {
+            const clickCircle = document.createElement('div');
+            const rect = element.getBoundingClientRect();
+            
+            clickCircle.style.position = 'absolute';
+            clickCircle.style.left = (event.clientX - rect.left) + 'px';
+            clickCircle.style.top = (event.clientY - rect.top) + 'px';
+            clickCircle.style.width = '0px';
+            clickCircle.style.height = '0px';
+            clickCircle.style.borderRadius = '50%';
+            clickCircle.style.background = 'rgba(102, 126, 234, 0.5)';
+            clickCircle.style.transform = 'translate(-50%, -50%)';
+            clickCircle.style.animation = 'clickExpand 0.5s ease-out';
+            clickCircle.style.pointerEvents = 'none';
+            
+            element.appendChild(clickCircle);
+            
+            setTimeout(() => {
+                clickCircle.remove();
+            }, 500);
+        }
+
+        // Setup keyboard navigation
+        function setupKeyboardNavigation() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            cards.forEach((card, index) => {
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Feature: ${card.querySelector('h3').textContent}`);
+                
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+                
+                card.addEventListener('focus', function() {
+                    this.style.outline = '3px solid #667eea';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                card.addEventListener('blur', function() {
+                    this.style.outline = 'none';
+                });
+            });
+        }
+
+        // Toast notification system
+        function showToast(message, duration = 3000) {
+            // Remove existing toast
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 1000;
+                font-weight: 500;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Animate out
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, duration);
+        }
+
+        // Add CSS animations dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes clickExpand {
+                to {
+                    width: 100px;
+                    height: 100px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Performance optimization: Throttle scroll events
+        let ticking = false;
+        
+        function updateScrollEffects() {
+            // Add any scroll-based effects here
+            ticking = false;
+        }
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateScrollEffects);
+                ticking = true;
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // Recalculate any position-dependent effects
+            console.log('Window resized, updating layout...');
+        });
+    </script>
+</body>
+</html>

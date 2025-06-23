@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogSphere - About</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .content-section {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideUp 1s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3)); }
+            to { filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6)); }
+        }
+
+        .icon-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .main-icon {
+            font-size: 5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 2s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .main-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 10px 20px rgba(102, 126, 234, 0.4));
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .description {
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 4rem;
+            animation: fadeIn 1.5s ease-out 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .mission-section {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            animation: fadeIn 1.5s ease-out 1s both;
+        }
+
+        .mission-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2d3748;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .mission-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .mission-text {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            animation: fadeIn 1.5s ease-out 1.5s both;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -12px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .feature-text {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 4rem;
+            animation: fadeIn 1.5s ease-out 2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -12px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px -12px rgba(102, 126, 234, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                margin: 1rem;
+                padding: 2rem 1rem;
+            }
+            
+            .main-icon {
+                font-size: 3.5rem;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    
+    <!-- About Section -->
+    <section class="content-section">
+        <h2 class="section-title">About BlogSphere</h2>
+        
+        <div class="icon-container">
+            <i class="fas fa-blog main-icon" id="mainIcon"></i>
+        </div>
+        
+        <p class="description">
+            BlogSphere is a modern, user-friendly blog management system designed to help writers, content creators, and businesses share their stories with the world. Our platform combines powerful features with an intuitive interface, making it easy for anyone to create, manage, and publish engaging content.
+        </p>
+        
+        <div class="mission-section">
+            <h3 class="mission-title">Our Mission</h3>
+            <p class="mission-text">
+                We believe that everyone has a story to tell. Our mission is to provide the tools and platform necessary to help you share your voice, connect with your audience, and build a community around your content.
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-pen-fancy feature-icon"></i>
+                <h4 class="feature-title">Easy Writing</h4>
+                <p class="feature-text">Intuitive editor with rich formatting options and real-time preview.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-users feature-icon"></i>
+                <h4 class="feature-title">Community</h4>
+                <p class="feature-text">Connect with other writers and build your audience organically.</p>
+            </div>
+            
+            <div class="feature-card">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h4 class="feature-title">Analytics</h4>
+                <p class="feature-text">Track your content performance with detailed insights and metrics.</p>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <a href="#" class="cta-button" id="ctaButton">Start Your Journey</a>
+        </div>
+    </section>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size and position
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                
+                // Random animation delay and duration
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Main icon click animation
+        document.getElementById('mainIcon').addEventListener('click', function() {
+            this.style.transform = 'scale(0.9) rotate(360deg)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 300);
+        });
+        
+        // Feature cards hover sound effect simulation
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.95)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.background = 'rgba(255, 255, 255, 0.8)';
+            });
+        });
+        
+        // CTA button click effect
+        document.getElementById('ctaButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+                alert('Welcome to BlogSphere! Ready to start your blogging journey?');
+            }, 150);
+        });
+        
+        // Scroll-triggered animations
+        function handleScroll() {
+            const elements = document.querySelectorAll('.feature-card, .mission-section');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Parallax effect for main content
+        function handleParallax() {
+            const scrolled = window.pageYOffset;
+            const contentSection = document.querySelector('.content-section');
+            const rate = scrolled * -0.5;
+            
+            if (contentSection) {
+                contentSection.style.transform = `translateY(${rate}px)`;
+            }
+        }
+        
+        // Typewriter effect for mission text
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Add scroll event listeners
+            window.addEventListener('scroll', handleScroll);
+            window.addEventListener('scroll', handleParallax);
+            
+            // Initial check for visible elements
+            handleScroll();
+            
+            // Add a subtle typing effect to the mission text after 3 seconds
+            setTimeout(() => {
+                const missionText = document.querySelector('.mission-text');
+                const originalText = missionText.textContent;
+                typeWriter(missionText, originalText, 30);
+            }, 3000);
+        });
+        
+        // Add some interactive hover effects
+        document.addEventListener('mousemove', function(e) {
+            const cursor = {
+                x: e.clientX,
+                y: e.clientY
+            };
+            
+            // Subtle parallax effect for particles
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.01;
+                const x = (cursor.x * speed);
+                const y = (cursor.y * speed);
+                
+                particle.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+        
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

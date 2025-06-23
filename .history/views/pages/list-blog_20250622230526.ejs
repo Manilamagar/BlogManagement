@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Blogs - BlogSphere</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .blog-list {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .blog-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-title {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .blog-meta {
+            color: #777;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .blog-content {
+            color: #444;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            text-decoration: none;
+            background: #667eea;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-list"></i> All Blog Posts</h1>
+
+    <div class="blog-list">
+        <% if (blogs.length === 0) { %>
+            <p style="text-align: center;">No blog posts found.</p>
+        <% } else { %>
+            <% blogs.forEach(blog => { %>
+                <div class="blog-item">
+                    <div class="blog-title"><%= blog.title %></div>
+                    <div class="blog-meta">
+                        <i class="fas fa-user"></i> <%= blog.author %> |
+                        <i class="fas fa-calendar"></i> <%= blog.date %>
+                    </div>
+                    <div class="blog-content">
+                       
+                    </div>
+                </div>
+          
+    </div>
+
+    <div style="text-align: center;">
+        <a href="/" class="back-btn"><i class="fas fa-home"></i> Back to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#4f46e5',
+                            dark: '#6366f1'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8 max-w-md">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-primary-light dark:text-primary-dark">Todo App</h1>
+        </header>
+        
+    <!-- Add Blog Form -->
+    <form action="/add" method="POST" class="mb-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow flex items-center space-x-3">
+        <input 
+            type="text" 
+            name="Task" 
+            placeholder="Add a new blog post..." 
+            class="flex-1 px-3 py-2 rounded border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark"
+            required
+        >
+        <button 
+            type="submit" 
+            class="bg-primary-light dark:bg-primary-dark text-white px-4 py-2 rounded hover:bg-indigo-700 dark:hover:bg-indigo-500 transition"
+        >
+            Add Blog
+        </button>
+    </form>
+    <!-- Blog List Header -->
+    <h2 class="text-xl font-semibold mb-4 text-primary-light dark:text-primary-dark">Blog List</h2>
+        <% todos.forEach(function(todo) { %>
+        <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+            <label class="flex items-center space-x-3">
+                <input type="checkbox" class="form-checkbox h-5 w-5 text-primary-light dark:text-primary-dark" <% if (todo.completed) { %>
+                    checked<% } %> data-id="<%= todo.id %>">
+                <span class="text-gray-800 dark:text-gray-200 <% if (todo.completed) { %>line-through opacity-70<% } %>"><%= todo.Task %>
+                </span>
+
+            </label>
+            
+        </div>
+
+        
+                <a href="/delete/<%- todo.id%>"><button class="text-red-500 hover:text-red-700" data-id="<%= todo.id %>">Delete</button></a>
+                
+
+            <a href="/edit/<%- todo.id%>"><button class="text-blue-500 hover:text-blue-700" data-id="<%= todo.id %>">Edit</button></a>
+        
+        <% }); %>
+
+ 
+</body>
+</html>
