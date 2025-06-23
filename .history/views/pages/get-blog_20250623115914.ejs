@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogSphere - Blog Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .logo::before {
+            content: "🌐";
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9ff;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .account-switcher {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 8px;
+        }
+
+        .account-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .account-item:hover {
+            background: #f8f9ff;
+        }
+
+        .account-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .recent-posts {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .recent-posts h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-full {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6fd8;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">BlogSphere</a>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" class="nav-link active" onclick="showPage('home')">🏠 Home</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('about')">ℹ️ About</a></li>
+                <li><a href="#" class="nav-link" onclick="showPage('features')">⭐ Features</a></li>
+            </ul>
+
+            <div class="user-menu" id="userMenu">
+                <div class="user-avatar" id="userAvatar" onclick="toggleDropdown()">?</div>
+                <div class="dropdown" id="dropdown">
+                    <div class="dropdown-item" onclick="showModal('loginModal')">🔑 Login</div>
+                    <div class="dropdown-item" onclick="showModal('registerModal')">📝 Register</div>
+                    <div class="dropdown-item" id="dashboardLink" style="display: none;" onclick="showDashboard()">📊 Dashboard</div>
+                    <div class="dropdown-item" id="logoutLink" style="display: none;" onclick="logout()">🚪 Logout</div>
+                    
+                    <div class="account-switcher" id="accountSwitcher" style="display: none;">
+                        <div style="padding: 8px 16px; font-size: 0.9rem; color: #666; border-bottom: 1px solid #f0f0f0;">Switch Account</div>
+                        <div id="accountList"></div>
+                        <div class="dropdown-item" onclick="showModal('registerModal')" style="color: #667eea;">➕ Add Account</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="homePage" class="page">
+            <div class="hero">
+                <h1>Welcome to BlogHub</h1>
+                <p>Create, share, manage and Discover your thoughts with the world Amazing Stories in blogs</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="showModal('registerModal')">✍️ Add Blogging Today</button>
+                    <button class="btn btn-primary" onclick="showPage('features')">👁️ View Blogs</button>
+                </div>
+            </div>
+
+            <div class="recent-posts">
+                <h2>Recent Blog Posts</h2>
+                <div class="posts-grid">
+                    <div class="post-card">
+                        <h3>Getting Started with Web Development</h3>
+                        <p>Learn the basics of HTML, CSS, and JavaScript</p>
+                    </div>
+                    <div class="post-card">
+                        <h3>The Future of AI</h3>
+                        <p>Exploring artificial intelligence trends</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="userDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h1>User Dashboard</h1>
+                <p>Welcome back, <span id="dashboardUsername"></span>!</p>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Total Posts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">543</div>
+                    <div class="stat-label">Total Views</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89</div>
+                    <div class="stat-label">Comments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">34</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <p>System Administration Panel</p>
+            </div>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">423</div>
+                    <div class="stat-label">Total Posts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,234</div>
+                    <div class="stat-label">Total Comments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">System Health</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="hideModal('loginModal')">&times;</button>
+            <h2>Login to BlogSphere</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-full">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Don't have an account? <a href="#" onclick="hideModal('loginModal'); showModal('registerModal')" style="color: #667eea;">Register here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="hideModal('registerModal')">&times;</button>
+            <h2>Register for BlogSphere</h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerRole">Account Type</label>
+                    <select id="registerRole" required>
+                        <option value="">Select Role</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-secondary btn-full">Register</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                Already have an account? <a href="#" onclick="hideModal('registerModal'); showModal('loginModal')" style="color: #667eea;">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentUser = null;
+        let registeredUsers = [];
+        let isDropdownOpen = false;
+
+        // Initialize the application
+        function init() {
+            // Load users from memory (in a real app, this would be from a database)
+            const savedUsers = getSavedUsers();
+            if (savedUsers.length > 0) {
+                registeredUsers = savedUsers;
+                updateAccountSwitcher();
+            }
+        }
+
+        // User management functions
+        function getSavedUsers() {
+            // In a real application, this would fetch from a database
+            // For demo purposes, we'll use a simple array
+            return registeredUsers;
+        }
+
+        function saveUser(user) {
+            registeredUsers.push(user);
+            updateAccountSwitcher();
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const role = document.getElementById('registerRole').value;
+
+            // Check if user already exists
+            const existingUser = registeredUsers.find(user => user.email === email);
+            if (existingUser) {
+                alert('User with this email already exists!');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password, // In a real app, this should be hashed
+                role: role,
+                avatar: name.charAt(0).toUpperCase()
+            };
+
+            saveUser(newUser);
+            hideModal('registerModal');
+            
+            // Auto-login the new user
+            loginUser(newUser);
+            
+            alert('Registration successful! You are now logged in.');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Find user
+            const user = registeredUsers.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                loginUser(user);
+                hideModal('loginModal');
+                alert('Login successful!');
+            } else {
+                alert('Invalid email or password!');
+            }
+        }
+
+        function loginUser(user) {
+            currentUser = user;
+            updateUserInterface();
+        }
+
+        function logout() {
+            currentUser = null;
+            updateUserInterface();
+            showPage('home');
+            toggleDropdown();
+        }
+
+        function switchAccount(userId) {
+            const user = registeredUsers.find(u => u.id === userId);
+            if (user) {
+                loginUser(user);
+                toggleDropdown();
+            }
+        }
+
+        function updateUserInterface() {
+            const userAvatar = document.getElementById('userAvatar');
+            const dashboardLink = document.getElementById('dashboardLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const accountSwitcher = document.getElementById('accountSwitcher');
+            const dashboardUsername = document.getElementById('dashboardUsername');
+
+            if (currentUser) {
+                userAvatar.textContent = currentUser.avatar;
+                userAvatar.style.background = `linear-gradient(45deg, #667eea, #764ba2)`;
+                dashboardLink.style.display = 'block';
+                logoutLink.style.display = 'block';
+                
+                if (registeredUsers.length > 1) {
+                    accountSwitcher.style.display = 'block';
+                }
+                
+                dashboardUsername.textContent = currentUser.name;
+            } else {
+                userAvatar.textContent = '?';
+                userAvatar.style.background = `linear-gradient(45deg, #ccc, #999)`;
+                dashboardLink.style.display = 'none';
+                logoutLink.style.display = 'none';
+                accountSwitcher.style.display = 'none';
+            }
+        }
+
+        function updateAccountSwitcher() {
+            const accountList = document.getElementById('accountList');
+            accountList.innerHTML = '';
+
+            registeredUsers.forEach(user => {
+                if (!currentUser || user.id !== currentUser.id) {
+                    const accountItem = document.createElement('div');
+                    accountItem.className = 'account-item';
+                    accountItem.onclick = () => switchAccount(user.id);
+                    
+                    accountItem.innerHTML = `
+                        <div class="account-avatar">${user.avatar}</div>
+                        <div>
+                            <div style="font-weight: 500;">${user.name}</div>
+                            <div style="font-size: 0.8rem; color: #666;">${user.role}</div>
+                        </div>
+                    `;
+                    
+                    accountList.appendChild(accountItem);
+                }
+            });
+        }
+
+        // UI Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            isDropdownOpen = !isDropdownOpen;
+            
+            if (isDropdownOpen) {
+                dropdown.classList.add('show');
+                updateAccountSwitcher();
+            } else {
+                dropdown.classList.remove('show');
+            }
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page, .dashboard');
+            pages.forEach(page => {
+                page.style.display = 'none';
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            const targetPage = document.getElementById(pageId + 'Page');
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                targetPage.classList.add('active');
+            }
+
+            // Update nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+        }
+
+        function showDashboard() {
+            if (!currentUser) {
+                alert('Please login first!');
+                return;
+            }
+
+            // Hide all pages
+            const pages = document.querySelectorAll('.page, .dashboard');
+            pages.forEach(page => {
+                page.style.display = 'none';
+                page.classList.remove('active');
+            });
+
+            // Show appropriate dashboard
+            const dashboardId = currentUser.role === 'admin' ? 'adminDashboard' : 'userDashboard';
+            const dashboard = document.getElementById(dashboardId);
+            dashboard.style.display = 'block';
+            dashboard.classList.add('active');
+
+            toggleDropdown();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            if (!userMenu.contains(event.target) && isDropdownOpen) {
+                toggleDropdown();
+            }
+        });
+
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
