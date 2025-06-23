@@ -11,7 +11,7 @@
   <div class="w-full max-w-3xl">
     <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">📝 My Blog List</h1>
 
-    <% if (todos && todos.length > 0) { %>
+   <% todos.forEach(function(Todo){ %>
       <div class="grid gap-6 sm:grid-cols-2">
         <% todos.forEach(function(todo) { %>
           <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 border-l-4 
@@ -33,8 +33,8 @@
                 
 
             <a href="/edit/<%- todo.id%>"><button class="text-blue-500 hover:text-blue-700" data-id="<%= todo.id %>">Edit</button></a>
-            <!-- <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
-            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p> -->
+            <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
+            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p>
           </div>
 
 

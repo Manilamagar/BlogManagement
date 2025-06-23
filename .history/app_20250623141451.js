@@ -152,10 +152,8 @@ app.get("/delete/:id", async (req, res) => {
 
     res.redirect("/"); // Go back to homepage after deleting
 });
-app.get("/logout", (req, res) => {
-    response.render("logout.ejs")
-})
-app.get("/edit/:id",async(req,res) => {
+
+app.get("/edit/:id",isLoggedInOrNot,async(req,res) => {
    const id = req.params.id
    const todos = await db.todos.findAll({
     where: {
@@ -167,7 +165,7 @@ app.get("/edit/:id",async(req,res) => {
    res.render("pages/edit", {todos: todos}) //rendering the edit-todo.ejs file and passing the todo data to it
 })
 
-app.post("/edit/:id",async (req, res) => {
+app.post("/edit/:id", isLoggedInOrNot,async (req, res) => {
     const id = req.params.id
     const { title, subtitle, description } = req.body
 
@@ -183,10 +181,7 @@ app.post("/edit/:id",async (req, res) => {
     res.redirect("/")
 })
 
-app.post("/logout", (req, res) => {
-    res.clearCookie("token") 
-    res.redirect("/login") 
-})
+
 
 app.listen(4000,function(){
     console.log("Backend has started on port 3000")

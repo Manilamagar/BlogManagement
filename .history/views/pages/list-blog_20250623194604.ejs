@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-purple-100 min-h-screen p-6 flex flex-col items-center">
+
+  <div class="container">
+        <div class="header fade-in">
+            <h1>📖 Blog Posts</h1>
+            <p>Discover amazing content from our writers</p>
+        </div>
+
+
+            
+        
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search blog posts...">
+                    <select class="filter-select">
+                        <option>All Categories</option>
+                        <option>Technology</option>
+                        <option>Lifestyle</option>
+                        <option>Travel</option>
+                        <option>Food</option>
+                    </select>
+                    <select class="filter-select">
+                        <option>All Status</option>
+                        <option>Published</option>
+                        <option>Draft</option>
+                        <option>Scheduled</option>
+                    </select>
+                </div>
+                <% todos.forEach(function(Todo){ %>
+                <div class="blog-grid">
+                    <div class="blog-card">
+                        <div class="blog-card-image tech">
+                            💻
+                        </div>
+                        <div class="blog-card-content">
+                            <h3 class="blog-card-title"><%- Todo.task %></h3>
+
+<% if (todos.completed) { %>
+                <span class="inline-flex items-center text-green-600 font-medium text-sm">
+                  ✅ Done
+                </span>
+              <% } else { %>
+                <span class="inline-flex items-center text-yellow-600 font-medium text-sm">
+                  ⏳ Pending
+                </span>
+              <% } %>
+            </div>
+
+
+                            <div class="blog-card-meta">
+                                <div class="author-avatar">JS</div>
+                                <span>John Smith</span>
+                                <span>•</span>
+                                <span>March 15, 2025</span>
+                                <span>•</span>
+                                <div class="reading-time">
+                                    <span>📖</span>
+                                    <span>5 min read</span>
+                                </div>
+                            </div>
+                            <p class="blog-card-excerpt">
+                             <%- Todo.discription %>
+                            </p>
+                           
+                        </div>
+
+                           
+             <a href="/delete/<%- todo.id%>"><button class="text-red-500 hover:text-red-700" data-id="<%= todo.id %>">Delete</button></a>
+                
+
+            <a href="/edit/<%- todo.id%>"><button class="text-blue-500 hover:text-blue-700" data-id="<%= todo.id %>">Edit</button></a>
+            <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
+            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p>
+                    </div>
+                    <% }) %>
+
+                    
+        </div>
+    </div>
+
+
+
+          <div class="text-center mt-6">
+      <a href="/" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">← Back to Home</a>
+    </div>
+
+
+     
+  
+
+        <% }); %>
+      </div>
+ 
+
+</body>
+</html>

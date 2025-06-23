@@ -11,13 +11,17 @@
   <div class="w-full max-w-3xl">
     <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">📝 My Blog List</h1>
 
-    <% if (todos && todos.length > 0) { %>
+   <% todos.forEach(function(Todo){ %>
       <div class="grid gap-6 sm:grid-cols-2">
         <% todos.forEach(function(todo) { %>
           <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 border-l-4 
                       <%= todo.completed ? 'border-green-500' : 'border-yellow-400' %>">
             <div class="flex items-center justify-between mb-2">
-              <h2 class="text-xl font-semibold text-gray-900"><%= todo.task %></h2>
+              <h2 class="text-xl font-semibold text-gray-900"><%= Todo.title %></h2>
+
+              <p class="blog-card-excerpt">
+                             <%- Todo.discription %>
+                            </p>
               
               <% if (todos.completed) { %>
                 <span class="inline-flex items-center text-green-600 font-medium text-sm">
@@ -29,12 +33,18 @@
                 </span>
               <% } %>
             </div>
+
+
+            <div class="blog-card-actions">
+                                <span class="status-badge status-published">Published</span>
              <a href="/delete/<%- todo.id%>"><button class="text-red-500 hover:text-red-700" data-id="<%= todo.id %>">Delete</button></a>
                 
 
             <a href="/edit/<%- todo.id%>"><button class="text-blue-500 hover:text-blue-700" data-id="<%= todo.id %>">Edit</button></a>
-            <!-- <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
-            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p> -->
+</div>di
+
+            <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
+            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p>
           </div>
 
 

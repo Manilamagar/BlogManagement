@@ -8,16 +8,28 @@
 </head>
 <body class="bg-gradient-to-r from-blue-50 to-purple-100 min-h-screen p-6 flex flex-col items-center">
 
+  
+
+
+
+
+
+
+
+
+
+
   <div class="w-full max-w-3xl">
     <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">📝 My Blog List</h1>
 
-    <% if (todos && todos.length > 0) { %>
-      <div class="grid gap-6 sm:grid-cols-2">
+   
+      
         <% todos.forEach(function(todo) { %>
+          
           <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 border-l-4 
                       <%= todo.completed ? 'border-green-500' : 'border-yellow-400' %>">
             <div class="flex items-center justify-between mb-2">
-              <h2 class="text-xl font-semibold text-gray-900"><%= todo.task %></h2>
+              <h2 class="text-xl font-semibold text-gray-900"><%= Todo.title %></h2>
               
               <% if (todos.completed) { %>
                 <span class="inline-flex items-center text-green-600 font-medium text-sm">
@@ -33,8 +45,8 @@
                 
 
             <a href="/edit/<%- todo.id%>"><button class="text-blue-500 hover:text-blue-700" data-id="<%= todo.id %>">Edit</button></a>
-            <!-- <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
-            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p> -->
+            <p class="text-gray-600 text-sm mb-2"><%= todos.description || 'No description provided.' %></p>
+            <p class="text-xs text-gray-500">📅 <%= todos.date || 'No date' %></p>
           </div>
 
 
@@ -42,17 +54,14 @@
           <div class="text-center mt-6">
       <a href="/" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">← Back to Home</a>
     </div>
+
+
+     
+  
+
         <% }); %>
       </div>
-    <% } else { %>
-      <div class="text-center text-gray-700 mt-20">
-        <p class="text-lg font-medium">No todos yet! Add one to get started 🚀</p>
-      </div>
-
-
-       
-    <% } %>
-  </div>
+ 
 
 </body>
 </html>
